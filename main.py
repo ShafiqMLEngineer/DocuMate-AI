@@ -29,7 +29,9 @@ from langchain_core.runnables import (
 )
 
 
-load_dotenv()
+# load_dotenv()
+
+HF_TOKEN = st.secrets["HF_TOKEN"]
 
 st.set_page_config(
     page_title="ResearchMate",
@@ -95,6 +97,7 @@ def load_model():
             repo_id="Qwen/Qwen2.5-7B-Instruct",
             task="text-generation",
             temperature=0.2,
+            huggingfacehub_api_token=HF_TOKEN,
             max_new_tokens=1000
         )
     
@@ -124,12 +127,29 @@ with st.sidebar:
 
             filePath = temp_file.name # temp_file ki location
 
-        loader = PyPDFLoader(filePath)
+        # loader = PyPDFLoader(filePath)
 
+        # docs = loader.load()
+
+        # st.session_state.document = docs
+        # st.session_state.doc_name = upload_file.name
+
+
+        loader = PyPDFLoader(filePath)
+        
         docs = loader.load()
+
+        # Maximum 5 pages allowed
+        if len(docs) > 5:
+            st.error("❌ PDF must not contain more than 5 pages.")
+            os.remove(filePath)
+            st.stop()
 
         st.session_state.document = docs
         st.session_state.doc_name = upload_file.name
+
+
+        
 
         os.remove(filePath)
 
@@ -476,7 +496,7 @@ if user_question:
         response = ""
 
         try:
-            
+
             for chunk in final_chain.stream(user_question): # instead invoke we use stream taky rply ko attractive bna sky 
                 response += chunk
                 message_placeholder.markdown(response)

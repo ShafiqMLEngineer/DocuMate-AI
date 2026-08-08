@@ -176,17 +176,33 @@ if uploaded_file is not None:
             #----------------PDF Document Loader Lanchain------------
 
             # Load PDF
-            loader = PyPDFLoader(
-                temp_path
-            )
+            # loader = PyPDFLoader(
+            #     temp_path
+            # )
+
+            # documents = loader.load()
+
+
+            # # Save documents
+            # st.session_state.documents = documents
+
+            # st.session_state.paper_name = (uploaded_file.name) # file name store in session
+
+
+
+            loader = PyPDFLoader(temp_path)
 
             documents = loader.load()
 
+            # Maximum 5 pages allowed
+            if len(documents) > 5:
+                st.error("❌ PDF must not contain more than 5 pages.")
+                os.remove(temp_path)
+                st.stop()
 
-            # Save documents
             st.session_state.documents = documents
+            st.session_state.paper_name = uploaded_file.name
 
-            st.session_state.paper_name = (uploaded_file.name) # file name store in session
 
 
             # New paper = new conversation
