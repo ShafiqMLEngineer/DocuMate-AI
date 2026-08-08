@@ -9,6 +9,15 @@ Instead of manually reading through a document, users can ask questions in natur
 The application is designed to work with different types of PDF documents, including **research papers, reports, CVs, articles, manuals, notes, academic documents, and business documents**.
 
 ---
+## 🚀 Live Demo
+
+Try DocsMate AI live:
+
+👉 https://langchain-docs-mate.streamlit.app/
+
+Upload a PDF and start asking questions about your document.
+
+---
 
 ## ✨ Features
 
